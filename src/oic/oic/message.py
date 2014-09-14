@@ -457,17 +457,14 @@ class OpenIDSchema(Message):
 
     def verify(self, **kwargs):
         if "birthdate" in self:
-            # Either YYYY-MM-DD or just YYYY or 0000-MM-DD
+            # Either YYYY-MM-DD or just YYYY
             try:
                 _ = time.strptime(self["birthdate"], "%Y-%m-%d")
             except ValueError:
                 try:
                     _ = time.strptime(self["birthdate"], "%Y")
                 except ValueError:
-                    try:
-                        _ = time.strptime(self["birthdate"], "0000-%m-%d")
-                    except ValueError:
-                        raise VerificationError("Birthdate format error", self)
+                    raise VerificationError("Birthdate format error", self)
 
         return super(OpenIDSchema, self).verify(**kwargs)
 
